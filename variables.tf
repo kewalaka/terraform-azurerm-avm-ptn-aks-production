@@ -249,3 +249,14 @@ variable "tags" {
   default     = null
   description = "(Optional) Tags of the resource."
 }
+
+variable "api_server_vnet_integration" {
+  default     = false
+  type        = bool
+  description = <<DESCRIPTION
+  # https://azure.github.io/Azure-Verified-Modules/specs/shared/#id-sfr1---category-composition---preview-services
+  THIS IS A VARIABLE USED FOR A PREVIEW SERVICE/FEATURE, MICROSOFT MAY NOT PROVIDE SUPPORT FOR THIS, PLEASE CHECK THE PRODUCT DOCS FOR CLARIFICATION
+
+  Enable VNET integration for the AKS cluster
+DESCRIPTION
+}
