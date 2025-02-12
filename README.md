@@ -27,7 +27,7 @@ Major version Zero (0.y.z) is for initial development. Anything MAY change at an
 
 The following requirements are needed by this module:
 
-- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.3.0)
+- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.9, < 2.0)
 
 - <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (>= 1.13.0, < 3.0)
 
@@ -135,7 +135,7 @@ object({
     name                          = string
     private_dns_zone_resource_ids = set(string)
     subnet_resource_id            = string
-
+    zone_redundancy_enabled       = optional(bool)
   })
 ```
 
@@ -582,7 +582,8 @@ map(object({
   os\_disk\_size\_gb      = (Optional) The Agent Operating System disk size in GB. Changing this forces a new resource to be created.  
   tags                 = (Optional) A mapping of tags to assign to the resource. At this time there's a bug in the AKS API where Tags for a Node Pool are not stored in the correct case - you [may wish to use Terraform's `ignore_changes` functionality to ignore changes to the casing](https://www.terraform.io/language/meta-arguments/lifecycle#ignore_changess) until this is fixed in the AKS API.  
   labels               = (Optional) A map of Kubernetes labels which should be applied to nodes in this Node Pool.  
-  node\_taints          = (Optional) A list of the taints added to new nodes during node pool create and scale.
+  node\_taints          = (Optional) A list of the taints added to new nodes during node pool create and scale.  
+  zones                = (Optional) A list of Availability Zones across which the Node Pool should be spread. Changing this forces a new resource to be created.
 }))
 
 Example input:
@@ -624,6 +625,7 @@ map(object({
     os_disk_size_gb = optional(number, null)
     tags            = optional(map(string), {})
     labels          = optional(map(string), {})
+    zones           = optional(set(string), ["1", "2", "3"])
   }))
 ```
 
@@ -769,7 +771,7 @@ The following outputs are exported:
 
 ### <a name="output_current_kubernetes_version"></a> [current\_kubernetes\_version](#output\_current\_kubernetes\_version)
 
-Description: The current version running on the Azure Kubernetes Managed Cluster.
+Description: The current version running on the Azure Kubernetes Managed Cluster
 
 ### <a name="output_fqdn"></a> [fqdn](#output\_fqdn)
 
@@ -833,7 +835,7 @@ Description: The FQDN for the Kubernetes Cluster when private link has been enab
 
 ### <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id)
 
-Description: The `azurerm_kubernetes_cluster`'s resource id.
+Description: The Kubernetes Managed Cluster ID.
 
 ### <a name="output_web_app_routing_identity"></a> [web\_app\_routing\_identity](#output\_web\_app\_routing\_identity)
 

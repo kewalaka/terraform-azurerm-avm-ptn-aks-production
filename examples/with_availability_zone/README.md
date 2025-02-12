@@ -5,7 +5,7 @@ This deploys the module with a region that has availability zones.
 
 ```hcl
 terraform {
-  required_version = ">= 1.3.0"
+  required_version = ">= 1.9, < 2.0"
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -59,11 +59,11 @@ module "test" {
     resource_group_name = azurerm_resource_group.this.name
     node_subnet_id      = module.avm_res_network_virtualnetwork.subnets["subnet"].resource_id
     pod_cidr            = "192.168.0.0/16"
-    acr = {
-      name                          = module.naming.container_registry.name_unique
-      subnet_resource_id            = module.avm_res_network_virtualnetwork.subnets["private_link_subnet"].resource_id
-      private_dns_zone_resource_ids = [azurerm_private_dns_zone.this.id]
-    }
+  }
+  acr = {
+    name                          = module.naming.container_registry.name_unique
+    subnet_resource_id            = module.avm_res_network_virtualnetwork.subnets["private_link_subnet"].resource_id
+    private_dns_zone_resource_ids = [azurerm_private_dns_zone.this.id]
   }
   managed_identities = {
     user_assigned_resource_ids = [
@@ -75,7 +75,7 @@ module "test" {
   location = "East US 2" # Hardcoded because we have to test in a region with availability zones
   node_pools = {
     workload = {
-      name                 = "workloadworkload" #Long name to test the truncate to 12 characters
+      name                 = "workload" #Long name to test the truncate to 12 characters
       vm_size              = "Standard_D2d_v5"
       orchestrator_version = "1.30"
       max_count            = 10
@@ -131,7 +131,7 @@ module "avm_res_network_virtualnetwork" {
 
 The following requirements are needed by this module:
 
-- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.3.0)
+- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.9, < 2.0)
 
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (>= 4, <5)
 
